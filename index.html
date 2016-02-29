@@ -5,25 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">    
      
      <!-- 1. Load libraries -->
-    <!-- IE required polyfills, in this exact order -->
-        <script src="node_modules/systemjs/dist/system.src.js"></script>
-    
-
-    
-     <script>
-    // Fixes undefined module function in SystemJS bundle
-    function module() {}
-    </script>
+    <script src="node_modules/angular2/bundles/angular2-polyfills.js"></script>
+    <script src="node_modules/systemjs/dist/system.src.js"></script>
+    <script src="node_modules/typescript/lib/typescript.js"></script>
+    <script src="node_modules/rxjs/bundles/Rx.js"></script>
+    <script src="node_modules/angular2/bundles/angular2.dev.js"></script>
     
     <!-- 2. Configure SystemJS -->
-   <script>
+    <script>
       System.config({
-        transpiler: 'typescript', 
-        typescriptOptions: { emitDecoratorMetadata: true },
-        packages: {        
-          app: {
-            format: 'register',
-            defaultExtension: 'ts'
+        "transpiler": "typescript",      
+        "typescriptOptions": { 
+            "emitDecoratorMetadata": true 
+        },
+        "packages": {        
+          "app": {
+            "defaultExtension": "ts"
           }
         }
       });

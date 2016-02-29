@@ -1,3 +1,4 @@
 import {bootstrap} from 'angular2/platform/browser';
-import {Angular2AppComponent} from './components/angular2app-component';
-bootstrap(Angular2AppComponent);
+import {Angular2AppComponent} from './components/angular2app.component';
+import {SearchBar} from './components/search-bar/search-bar.component';
+bootstrap(Angular2AppComponent).catch(err => console.error(err));
