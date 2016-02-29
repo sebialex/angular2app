@@ -1,1 +1,2 @@
-# Test 2
+# Install Instruction
+ node/npm must be installed
