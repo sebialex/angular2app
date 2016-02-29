@@ -1,4 +1,4 @@
-import {Component, Input, OnChanges} from 'angular2/core';
+import {Component, Input, Output, OnChanges} from 'angular2/core';
 import {Command} from '../command/command.component'
 
 @Component({
@@ -14,7 +14,7 @@ export class SearchBar {
     
     
     constructor() {
-        this.searchString = "init"; 
+        this.searchString = ""; 
         this.prevSearchString = this.searchString;       
         this.commands = [];
         this.otherString = this.commands.length.toString();
@@ -24,15 +24,23 @@ export class SearchBar {
         
         var commandStrings = this.getCommandStrings(this.searchString);
         
-        var currentText = this.searchString.replace(/ /g, '');
-        
+        var currentText = this.searchString.replace(/'a'/g, '');
+        this.searchString = currentText;
+                        
+        var currentText = currentText.replace(/ /g, '');
+       
+                
         if (this.commands.length == 0) {
-            var cmd = new Command(this.searchString);
+            var cmd = new Command(currentText);
             this.commands.push(cmd);
+            
+            this.otherString = this.getActionChoices().join(",");
         }
         else {
             
             var changeIndex = this.getIndexOfChange(currentText, this.prevSearchString);
+            
+            this.otherString = "stuff";
             
             for (var i = 0, len = this.commands.length; i < len; i++) {
             
@@ -41,7 +49,7 @@ export class SearchBar {
                        
         //this.otherString = this.testString.replace(/ /g, '');
         
-        this.prevSearchString = this.searchString;
+        this.prevSearchString = currentText;
         //console.log(commandStrings);
     }     
     
@@ -92,6 +100,8 @@ export class SearchBar {
         return commandStrings;
     }
     
-    
+    getActionChoices(): string [] {
+        return ["sell", "buy", "rent" ];
+    }
        
 }
