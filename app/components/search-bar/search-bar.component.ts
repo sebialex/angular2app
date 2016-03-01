@@ -1,23 +1,27 @@
 import {Component, Input, Output, OnChanges} from 'angular2/core';
 import {Command} from '../command/command.component'
+import {DAOService} from '../../services/dao.service';
 
 @Component({
 	selector: 'search-bar',
-	templateUrl: 'app/components/search-bar/search-bar.template.html'
+	templateUrl: 'app/components/search-bar/search-bar.template.html',
+    providers:[DAOService]
 })
 export class SearchBar { 
     @Input() searchString: string;
     prevSearchString: string;
     otherString: string;
     
-    commands: Command []
+    commands: Command [];
+    daoService: DAOService;
     
-    
-    constructor() {
+    constructor(daoService: DAOService) {
         this.searchString = ""; 
         this.prevSearchString = this.searchString;       
         this.commands = [];
         this.otherString = this.commands.length.toString();
+        this.daoService = daoService;
+        
     }
     
     onChange(event) {
@@ -29,15 +33,26 @@ export class SearchBar {
                         
         var currentText = currentText.replace(/ /g, '');
        
+        this.commands = [];
+       
+       for (var i = 0, len = commandStrings.length; i < len; i++) {                       
+            var cmd = new Command(commandStrings[i]);      
+            if (i == 0) {
+                cmd.setType("action");
+            }     
+            this.commands.push(cmd);
+       }
+       
                 
         if (this.commands.length == 0) {
-            var cmd = new Command(currentText);
-            this.commands.push(cmd);
+            //var cmd = new Command(currentText, this.daoService);
             
-            this.otherString = this.getActionChoices().join(",");
+           // this.commands.push(cmd);
+            
+            //this.otherString = this.getActionChoices().join(",");
         }
         else {
-            
+                        
             var changeIndex = this.getIndexOfChange(currentText, this.prevSearchString);
             
             this.otherString = "stuff";

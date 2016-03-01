@@ -1,0 +1,4 @@
+<input type="text" [(ngModel)]="searchString" (input)="onChange($event)"/>
+<ul>
+    <li *ngFor="#result of results">Hmm:{{result}}</li>
+</ul>

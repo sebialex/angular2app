@@ -1,5 +1,7 @@
 <div>Search:</div><input type="text" [(ngModel)]="searchString" (input)="onChange($event)"/>
-
+<div>    
+       <command *ngFor="#i of commands"></command>     
+</div>
 <br/>
 {{searchString}}
 <br/>
