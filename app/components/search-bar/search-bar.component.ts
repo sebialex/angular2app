@@ -1,11 +1,13 @@
 import {Component, Input, Output, OnChanges} from 'angular2/core';
 import {Command} from '../command/command.component'
+import {Command2} from '../command2/command2.component'
 import {DAOService} from '../../services/dao.service';
 
 @Component({
 	selector: 'search-bar',
 	templateUrl: 'app/components/search-bar/search-bar.template.html',
-    providers:[DAOService]
+    providers:[DAOService],
+    directives: [Command2]
 })
 export class SearchBar { 
     @Input() searchString: string;
@@ -14,14 +16,15 @@ export class SearchBar {
     
     commands: Command [];
     daoService: DAOService;
+    command2: Command2;
+    
     
     constructor(daoService: DAOService) {
-        this.searchString = ""; 
+        this.searchString = null; 
         this.prevSearchString = this.searchString;       
         this.commands = [];
         this.otherString = this.commands.length.toString();
-        this.daoService = daoService;
-        
+        this.daoService = daoService;               
     }
     
     onChange(event) {
@@ -35,13 +38,13 @@ export class SearchBar {
        
         this.commands = [];
        
-       for (var i = 0, len = commandStrings.length; i < len; i++) {                       
+        for (var i = 0, len = commandStrings.length; i < len; i++) {                       
             var cmd = new Command(commandStrings[i]);      
             if (i == 0) {
                 cmd.setType("action");
             }     
             this.commands.push(cmd);
-       }
+        }
        
                 
         if (this.commands.length == 0) {
@@ -109,7 +112,7 @@ export class SearchBar {
                 continue;
              }
              var trimmedToken = token.trim();             
-             commandStrings.push(commandStrings);              
+             commandStrings.push(trimmedToken);              
         }
         
         return commandStrings;

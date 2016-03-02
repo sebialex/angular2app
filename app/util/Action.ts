@@ -1,18 +1,18 @@
 export class Action {     
-    _name: string;
+    _value: string;
     _complete: boolean;
     
-    constructor(name :string) {
-        this._name = name;
+    constructor(value :string) {
+        this._value = value;
         this._complete = false;
     }
     
     set value(newValue: string) {
-        this._name = newValue;
+        this._value = newValue;
     }
     
-    get name(): string {
-        return this._name;
+    get value(): string {
+        return this._value;
     }
     
     set complete(status: boolean) {

@@ -1,4 +1,12 @@
-<input type="text" [(ngModel)]="searchString" (input)="onChange($event)"/>
-<ul>
-    <li *ngFor="#result of results">Hmm:{{result}}</li>
-</ul>
+<div>
+<input type="text" [(ngModel)]="searchString2" (keyup)="onChange($event)"/>
+     <ul>
+      <li *ngFor="#value of values" (click)="selectItem(value.value)">{{value.label}}</li>
+    </ul>
+    
+    <!--<div>
+       <div *ngFor="#result of results">Hmm:{{result}}</div>
+    </div> -->
+
+<div>
+    {{searchString2}}
