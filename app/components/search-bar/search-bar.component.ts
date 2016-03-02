@@ -64,7 +64,7 @@ export class SearchBar {
     onKeyUp(event) {
         console.log("onKeyUp");
         if (this.inputElem == null) {
-             this.inputElem = event.originalTarget; 
+             this.inputElem = event.target; 
         }                              
         this.handleInput(this.searchString, true, true);                     
     }
