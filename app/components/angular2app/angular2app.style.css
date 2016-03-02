@@ -1,5 +1,20 @@
 .angular2appDiv {
      width: 100%; 
      position: relative;
-     left:25%
+     left:25%;
+     font: normal normal normal 18px/1.2 "Helvetica Neue", Roboto, "Segoe UI", Calibri, sans-serif;
+}
+
+h1 {
+    position: relative;
+    width: 50%;
+    left:0%;
+    text-align: center;
+}
+
+p {
+    position: relative;
+    width: 50%;
+    left:0%;
+    text-align: center;
 }

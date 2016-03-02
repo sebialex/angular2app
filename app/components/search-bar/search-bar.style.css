@@ -9,8 +9,7 @@
     text-align: left;
     background-color: #fff;
     background-repeat: repeat-x;
-    border: 1px solid #0097cf;
-  
+    border: 1px solid #0097cf;  
     max-width: 800px;
     margin: 0 auto;
     font: normal normal normal 18px/1.2 "Helvetica Neue", Roboto, "Segoe UI", Calibri, sans-serif;
@@ -18,8 +17,7 @@
     list-style-type: none;   
     font-size: 18px;
     margin-top: 2px;
-    line-height: 18px;
-   
+    line-height: 18px;   
 }
 
 .searchResults:hover {    
@@ -46,8 +44,9 @@
      font-size: 18px;
      margin-top: 2px;    
      line-height: 18px;
-     border: 2px solid #0097cf;    
-  
+     border: 1px solid #0097cf;
+     box-shadow: 0 0 3px #999;
+     border-radius: 3px;      
 }
 
 .searchBarDiv {

@@ -22,16 +22,13 @@ export class SearchBar {
         
     @Input() 
     searchString: string;
-    
-    @Input()
-    returnAllResults: boolean;
-
+  
     @Input()
     values: DropdownElement[];
     
+    returnAllResults: boolean;
     valuesMap = {};            
-    commandChain: SearchCommandChain;
-    
+    commandChain: SearchCommandChain;   
     inputElem = null;
     
     constructor(private daoService: DAOService) {
@@ -98,7 +95,7 @@ export class SearchBar {
         console.log("result=" + result);
         
         if (result == null) {
-             event.preventDefault();   
+            event.preventDefault();   
         }                      
     }
     
