@@ -1,3 +1,55 @@
-. searchResults {
-       
+.searchResults {
+    cursor: pointer;
+    box-sizing: border-box;
+    color: #000;
+    background: #fff;
+    position: relative;
+    width: 100%;  
+    padding: 20px;
+    text-align: left;
+    background-color: #fff;
+    background-repeat: repeat-x;
+    border: 1px solid #0097cf;
+  
+    max-width: 800px;
+    margin: 0 auto;
+    font: normal normal normal 18px/1.2 "Helvetica Neue", Roboto, "Segoe UI", Calibri, sans-serif;
+    font-weight: 400;
+    list-style-type: none;   
+    font-size: 18px;
+    margin-top: 2px;
+    line-height: 18px;
+   
+}
+
+.searchResults:hover {    
+    color: #fff;
+    background: #55acee;
+    background-color: #0097cf;
+    font-weight: 500;
+}
+
+.searchResultsList {
+   width: 50%;
+   padding: 15px;  
+   margin-top: -18px;
+   margin-left: -3px;
+}
+
+.searchBar {
+     font: normal normal normal 18px/1.2 "Helvetica Neue", Roboto, "Segoe UI", Calibri, sans-serif;
+     color: #000;
+     width: 50%;
+     height: 35px; 
+     padding: 10px;  
+     font-weight: 400;
+     font-size: 18px;
+     margin-top: 2px;    
+     line-height: 18px;
+     border: 2px solid #0097cf;    
+  
+}
+
+.searchBarDiv {
+      width: 100%;
 }

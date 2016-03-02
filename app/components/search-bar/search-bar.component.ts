@@ -16,7 +16,7 @@ export class DropdownElement {
 	selector: 'search-bar',
     providers: [DAOService, ElementRef],
 	templateUrl: 'app/components/search-bar/search-bar.template.html',
-    styleUrls: []
+    styleUrls: ['app/components/search-bar/search-bar.style.css']
 })
 export class SearchBar { 
         
@@ -41,29 +41,18 @@ export class SearchBar {
     }
     
     selectItem(value) {
-        //this.select.emit(value);
-        
-        
+
         var dropDown = this.valuesMap[value];
 
         if (dropDown) {         
-            var tokens = this.searchString.split(' ');
+ 
+            var currentValidCommands = this.commandChain.getValidCommandValues();
             
-           
-            var currentValue = this.commandChain.currentCommand.value;
-            console.log("[currentValue=" + currentValue + "]");
-            
-            var currentValid = this.commandChain.getValidCommandValues();
-            
-            if (currentValid == null || currentValid.length == 0) {
+            if (currentValidCommands == null || currentValidCommands.length == 0) {
                 this.searchString = dropDown.label + " ";
             }
-            else {
-                 console.log("list=[" + currentValid.join(' ') + "]");
-                                              
-                this.searchString = currentValid.join(' ') + " " + dropDown.label + " ";
-                
-               
+            else {                                                            
+                this.searchString = currentValidCommands.join(' ') + " " + dropDown.label + " ";                               
             }
             
             this.clearValues();
@@ -72,15 +61,6 @@ export class SearchBar {
                 this.inputElem.focus();
             }          
             this.handleInput(this.searchString, true, true);           
-            //if (tokens[tokens.length - 1] == currentValue) {
-            //    this.searchString = tokens.join(' ') + " " + dropDown.label;
-           // }
-            //else {
-               // tokens[tokens.length - 1] = dropDown.label;
-               // this.searchString = tokens.join(' ') + " ";
-          //  }
-                                   
-           
         }
     }
     
@@ -134,8 +114,7 @@ export class SearchBar {
             return;
         }
 
-        this.commandChain.populate(commandStrings);
-        //console.log("commandChain=" + this.commandChain.toString());
+        this.commandChain.populate(commandStrings);       
         var currentCommand = this.commandChain.currentCommand;
         
         if (currentCommand == null) {
@@ -143,8 +122,6 @@ export class SearchBar {
         }
         
         var searchStr = currentCommand.value;
-        
-        //console.log("searchStr=" + searchStr);
 
         var result = null;
         
@@ -175,8 +152,7 @@ export class SearchBar {
         else if (currentCommand.type == CommandType.end) {
             result = null;
         }
-  
-        
+          
         if (populateDropDown) {
             this.populateChoices(result, searchStr);
         }

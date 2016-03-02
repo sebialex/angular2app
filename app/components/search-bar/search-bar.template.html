@@ -1,9 +1,9 @@
-<div>
+<div class="searchBarDiv">
     <input type="checkbox" [(ngModel)]="returnAllResults" />Show Results On Space <br /> <br />
-    <input type="text" [(ngModel)]="searchString" (keyup)="onKeyUp($event)" (keydown)="onKeyDown($event)"/>
+    <input class="searchBar" type="text" [(ngModel)]="searchString" (keyup)="onKeyUp($event)" (keydown)="onKeyDown($event)"/>
     
     <!--<search-bar-input (gotInput)="onInput($event)"></search-bar-input>   -->
-    <ul>
+    <ul class="searchResultsList">
         <li class="searchResults" *ngFor="#value of values" (click)="selectItem(value.value)">{{value.label}}</li>
     </ul>   
 <div>
