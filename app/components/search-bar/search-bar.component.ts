@@ -102,9 +102,9 @@ export class SearchBar {
         var strToCheck = null;
         
         var key;
-                
+        var origKey;        
         if (event.key) {
-            key = event.key;
+            key = event.key.toLowerCase();
         }
         else if (event.code) {                     
           /** Chrome fix: Check for getting key another way, Chrome does not 
@@ -113,6 +113,8 @@ export class SearchBar {
            key = event.code.replace("Key", "").toLowerCase();
         }
   
+        origKey = key;
+
         if (key.length > 1) {
             key = "";
         }
@@ -125,8 +127,8 @@ export class SearchBar {
         }
 
         var result = this.handleInput(strToCheck, false);
-        
-        if (result == null) {
+  
+        if (result == null && !(origKey == "backspace" || origKey == "delete" || origKey == "arrowright" || origKey == "arrowleft")) {            
             event.preventDefault();   
         }                      
     }
