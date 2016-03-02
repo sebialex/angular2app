@@ -1,5 +1,11 @@
+/**
+ * Author: Sebastian Stanisor
+ */
 import {DAOService} from '../../services/dao.service';
 
+/**
+ * Types of commands
+ */
 export enum CommandType {
     action,
     item,
@@ -8,6 +14,9 @@ export enum CommandType {
     end
 }
 
+/**
+ * This is a container for a Search command. It is used as a state.
+ */
 export class SearchCommand {
     
     constructor(
@@ -21,6 +30,9 @@ export class SearchCommand {
     }
 }
 
+/**
+ * The command state machine.
+ */
 export class SearchCommandChain {
     action: SearchCommand;
     item: SearchCommand;
@@ -41,7 +53,10 @@ export class SearchCommandChain {
         this.price = null;
         this.end = null;
     }
-            
+          
+    /**
+     * Populates all the states given the input strings  
+     */  
     populate(tokens: string []): void {
         
         this.clean();
@@ -59,7 +74,10 @@ export class SearchCommandChain {
             }                                                                        
         }                
     }
-       
+    
+    /**
+     *  Returns a list of the values of all the currently valid commands 
+     */   
     getValidCommandValues(): string [] {
         
         var result = [];
@@ -88,6 +106,9 @@ export class SearchCommandChain {
         this.commandToStr(this.action) + this.commandToStr(this.item) + this.commandToStr(this.property) + this.commandToStr(this.price) +"}";
     }
     
+    /**
+     * Handles the given input string and figures out which state to go next
+     */
     private handleCommand(command: string) {
         if (!this.currentCommand.isValid) {                
             return;
@@ -118,6 +139,10 @@ export class SearchCommandChain {
         }  
     }
     
+    /**
+     * Gets the string representation of the given command or returns "[null]"
+     * if the given command is null
+     */
     private commandToStr(command: SearchCommand) {
         if (command == null) {
             return "[null]";

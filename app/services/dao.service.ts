@@ -1,3 +1,14 @@
+/**
+ * Author: Sebastian Stanisor
+ */
+
+/**
+ * This class is supposed to represent a data access object, which connects to a backend/persistence
+ * layer and provides results to given queries.
+ * 
+ * This DAO would connect to a database such as mongoDB or and sql DB
+ * For the purposes of this application, the values were hard coded
+ */
 export class DAOService {            
         
     actions = ["buy", "sell", "rent"];    
@@ -130,7 +141,11 @@ export class DAOService {
         return map;
     }
     
-        
+    /**
+     * Returns a sublist of the given list, of items that match the search string
+     * 
+     * @return null if none match the search string, a subset or the entire list if all match  
+     */    
     private static getListThatMatches(list: string[], searchStr: string): string [] {
   
         if (searchStr == null || list == null) {
