@@ -73,10 +73,18 @@ export class SearchBar {
                 
         var strToCheck = null;
         
-        var key = event.key;
-        
-        console.log("key.length=" + key.length);
-        
+        var key;
+                
+        if (event.key) {
+            key = event.key;
+        }
+        else if (event.code) {                     
+          /** Chrome fix: Check for getting key another way, Chrome does not 
+           *   use 'key' property in their events  
+            */       
+           key = event.code.replace("Key", "").toLowerCase();
+        }
+  
         if (key.length > 1) {
             key = "";
         }
@@ -87,12 +95,8 @@ export class SearchBar {
         else {
             strToCheck = this.searchString + key;
         }
-        
-        console.log("to stop=" + strToCheck);
-        
+
         var result = this.handleInput(strToCheck, false, false);
-        
-        console.log("result=" + result);
         
         if (result == null) {
             event.preventDefault();   
