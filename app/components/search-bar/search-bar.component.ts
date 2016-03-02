@@ -1,98 +1,208 @@
-import {Component, Input, Output, OnChanges} from 'angular2/core';
-import {Command} from '../command/command.component'
-import {Command2} from '../command2/command2.component'
+import {Component, Input, Output, EventEmitter, ElementRef} from 'angular2/core';
 import {DAOService} from '../../services/dao.service';
+import {SearchCommand, SearchCommandChain, CommandType} from './search-command';
+
+export class DropdownElement {
+  value: string;
+  label: string;
+
+  constructor(value:string, label:string) {
+    this.value = value;
+    this.label = label;
+  }
+}
 
 @Component({
 	selector: 'search-bar',
+    providers: [DAOService, ElementRef],
 	templateUrl: 'app/components/search-bar/search-bar.template.html',
-    providers:[DAOService],
-    directives: [Command2]
+    styleUrls: []
 })
 export class SearchBar { 
-    @Input() searchString: string;
-    prevSearchString: string;
-    otherString: string;
+        
+    @Input() 
+    searchString: string;
     
-    commands: Command [];
-    daoService: DAOService;
-    command2: Command2;
+    @Input()
+    returnAllResults: boolean;
+
+    @Input()
+    values: DropdownElement[];
     
+    valuesMap = {};            
+    commandChain: SearchCommandChain;
     
-    constructor(daoService: DAOService) {
-        this.searchString = null; 
-        this.prevSearchString = this.searchString;       
-        this.commands = [];
-        this.otherString = this.commands.length.toString();
-        this.daoService = daoService;               
+    inputElem = null;
+    
+    constructor(private daoService: DAOService) {
+        this.searchString = null;          
+        this.commandChain = new SearchCommandChain(daoService); 
+        this.returnAllResults = true;          
     }
     
-    onChange(event) {
+    selectItem(value) {
+        //this.select.emit(value);
         
-        var commandStrings = this.getCommandStrings(this.searchString);
         
-        var currentText = this.searchString.replace(/'a'/g, '');
-        this.searchString = currentText;
-                        
-        var currentText = currentText.replace(/ /g, '');
-       
-        this.commands = [];
-       
-        for (var i = 0, len = commandStrings.length; i < len; i++) {                       
-            var cmd = new Command(commandStrings[i]);      
-            if (i == 0) {
-                cmd.setType("action");
-            }     
-            this.commands.push(cmd);
-        }
-       
+        var dropDown = this.valuesMap[value];
+
+        if (dropDown) {         
+            var tokens = this.searchString.split(' ');
+            
+           
+            var currentValue = this.commandChain.currentCommand.value;
+            console.log("[currentValue=" + currentValue + "]");
+            
+            var currentValid = this.commandChain.getValidCommandValues();
+            
+            if (currentValid == null || currentValid.length == 0) {
+                this.searchString = dropDown.label + " ";
+            }
+            else {
+                 console.log("list=[" + currentValid.join(' ') + "]");
+                                              
+                this.searchString = currentValid.join(' ') + " " + dropDown.label + " ";
                 
-        if (this.commands.length == 0) {
-            //var cmd = new Command(currentText, this.daoService);
+               
+            }
             
-           // this.commands.push(cmd);
-            
-            //this.otherString = this.getActionChoices().join(",");
+            this.clearValues();
+    
+            if (this.inputElem != null) {
+                this.inputElem.focus();
+            }          
+            this.handleInput(this.searchString, true, true);           
+            //if (tokens[tokens.length - 1] == currentValue) {
+            //    this.searchString = tokens.join(' ') + " " + dropDown.label;
+           // }
+            //else {
+               // tokens[tokens.length - 1] = dropDown.label;
+               // this.searchString = tokens.join(' ') + " ";
+          //  }
+                                   
+           
+        }
+    }
+    
+    onKeyUp(event) {
+        console.log("onKeyUp");
+        if (this.inputElem == null) {
+             this.inputElem = event.originalTarget; 
+        }                              
+        this.handleInput(this.searchString, true, true);                     
+    }
+    
+    onKeyDown(event) {
+                
+        var strToCheck = null;
+        
+        var key = event.key;
+        
+        console.log("key.length=" + key.length);
+        
+        if (key.length > 1) {
+            key = "";
+        }
+        
+        if (this.searchString == null) {
+            strToCheck = key;
         }
         else {
-                        
-            var changeIndex = this.getIndexOfChange(currentText, this.prevSearchString);
-            
-            this.otherString = "stuff";
-            
-            for (var i = 0, len = this.commands.length; i < len; i++) {
-            
-            }
+            strToCheck = this.searchString + key;
         }
-                       
-        //this.otherString = this.testString.replace(/ /g, '');
         
-        this.prevSearchString = currentText;
-        //console.log(commandStrings);
-    }     
+        console.log("to stop=" + strToCheck);
+        
+        var result = this.handleInput(strToCheck, false, false);
+        
+        console.log("result=" + result);
+        
+        if (result == null) {
+             event.preventDefault();   
+        }                      
+    }
     
-    
-    
-    getIndexOfChange(input: string, prevInput: string) : number {
+    private handleInput(textLine: string, clearValue: boolean, populateDropDown: boolean): string [] {
+              
+        if (clearValue) {
+             this.clearValues();
+        }      
        
-       var index = -1;
-       var len;
-                    
-       if (input.length >= prevInput.length) {
-           len = prevInput.length;
-       }
-       else {
-           len = input.length;
-       }
-     
-       for (var i = 0; i < len; i++) {
-            index = i;
-            if (input[i] != prevInput[i]) {
-                break;
+        var commandStrings = this.getCommandStrings(textLine);
+
+        if (commandStrings == null) {
+            return;
+        }
+
+        this.commandChain.populate(commandStrings);
+        //console.log("commandChain=" + this.commandChain.toString());
+        var currentCommand = this.commandChain.currentCommand;
+        
+        if (currentCommand == null) {
+            return;
+        }
+        
+        var searchStr = currentCommand.value;
+        
+        //console.log("searchStr=" + searchStr);
+
+        var result = null;
+        
+        if (currentCommand.type == CommandType.action) {
+            if (currentCommand.isValid) {
+                 result = this.daoService.getItems(currentCommand.value, this.getEmptySearchItem());
             }
-       }
-       
-       return index;   
+            else {
+                result = this.daoService.getActions(searchStr);
+            }                                                      
+        }
+        else if (currentCommand.type == CommandType.item) {
+            if (currentCommand.isValid) {
+                result = this.daoService.getProperties(this.commandChain.item.value, this.getEmptySearchItem()); 
+            }  
+            else {
+                 result = this.daoService.getItems(this.commandChain.action.value, searchStr);  
+            }                                    
+        }
+        else if (currentCommand.type == CommandType.property) {                
+            result = this.daoService.getProperties(this.commandChain.item.value, searchStr);         
+        }
+        else if (currentCommand.type == CommandType.price) {
+            if (this.daoService.isPriceValid(this.commandChain.price.value)) {
+               result = [];
+            }        
+        }
+        else if (currentCommand.type == CommandType.end) {
+            result = null;
+        }
+  
+        
+        if (populateDropDown) {
+            this.populateChoices(result, searchStr);
+        }
+        
+        return result;  
+    }
+            
+    private getEmptySearchItem(): string {
+        if (this.returnAllResults) {
+            return "";
+        }
+        else {
+            return null; 
+        }
+    }
+    
+    private populateChoices(result: string[], searchStr: string): void {
+        if (result != null && !(result.length == 1 && result[0] == searchStr)) {   
+                   
+            for (var i = 0, len = result.length; i < len; i++) {
+                var key = "key" + i;
+                var dropDown = new DropdownElement(key, result[i]);
+                this.valuesMap[key] = dropDown;
+                this.values.push(dropDown);
+            }          
+        }      
     }
     
     /**
@@ -101,9 +211,21 @@ export class SearchBar {
      * NOTE: Whenever I can I try to decouple utility methods from the object (no this. references) 
      *       in case I want to refactor it later into a separate Util class
      */
-    getCommandStrings(input: string): string []  {
-        var commandStrings = [];        
+    private getCommandStrings(input: string): string []  {
+        
+        console.log("getCommandStrings=" + input);   
+           
+        if (input == null || input == "") {
+            return null;
+        }
+           
         var tokens = input.split(' ');
+        
+        if (tokens == null || tokens.length < 1) {
+            return null;
+        }
+        
+        var commandStrings = null;    
         
         // Get command strings only, get rid of whitespace
         for (var i = 0, len = tokens.length, token; i < len; i++) {
@@ -111,15 +233,23 @@ export class SearchBar {
              if (token == null) {
                 continue;
              }
-             var trimmedToken = token.trim();             
-             commandStrings.push(trimmedToken);              
+             token = token.trim();
+             if (token === '' || token === ' ') {
+                 continue;
+             }
+             
+             if (commandStrings == null) {
+                commandStrings = []; 
+             }
+             commandStrings.push(token);              
         }
         
         return commandStrings;
     }
     
-    getActionChoices(): string [] {
-        return ["sell", "buy", "rent" ];
+    private clearValues() {
+        this.values = [];
+        this.valuesMap = {};
     }
-       
+    
 }

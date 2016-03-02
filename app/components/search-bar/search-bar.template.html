@@ -1,9 +1,9 @@
-<div>Search:</div><input type="text" [(ngModel)]="searchString" (input)="onChange($event)"/>
-<div>    
-       <command *ngFor="#i of commands"></command>     
-</div>
-<br/>
-{{searchString}}
-<br/>
-{{otherString}}
-<command2>Test..</command2>
+<div>
+    <input type="checkbox" [(ngModel)]="returnAllResults" />Show Results On Space <br /> <br />
+    <input type="text" [(ngModel)]="searchString" (keyup)="onKeyUp($event)" (keydown)="onKeyDown($event)"/>
+    
+    <!--<search-bar-input (gotInput)="onInput($event)"></search-bar-input>   -->
+    <ul>
+        <li class="searchResults" *ngFor="#value of values" (click)="selectItem(value.value)">{{value.label}}</li>
+    </ul>   
+<div>

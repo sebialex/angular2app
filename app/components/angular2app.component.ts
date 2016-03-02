@@ -7,10 +7,5 @@ import {SearchBar} from './search-bar/search-bar.component';
     directives: [SearchBar]
 })
 export class Angular2AppComponent { 
-    
-    searchBar:  SearchBar;
-    
-    constructor() {
-        //this.searchBar = new SearchBar();
-    }
+    constructor() {}
 }
