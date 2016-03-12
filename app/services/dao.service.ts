@@ -39,7 +39,7 @@ export class DAOService {
         this.properties.set("shoes", ["running", "derby", "slipper", "moccasin", "jelly"]);
         this.properties.set("handbag", ["bucket", "box", "satchel", "sling", "shoulder"]);
         this.properties.set("pants", ["28", "29", "30", "31", "32" , "33"]);
-        this.properties.set("socks", ["black", "blue", "brawn", "green", "red"]);
+        this.properties.set("socks", ["black", "blue", "brown", "green", "red"]);
         this.properties.set("jacket", ["small", "medium", "large"]);
         
                 
